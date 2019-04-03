@@ -1,0 +1,17 @@
+{
+    "name": "china",
+    "concurrent": 100,
+    "token": "e50f3701cc599285313b59747c47c77f",
+    "tasks": [
+        { "layer": "img", "level": 1 },
+        { "layer": "img", "level": 2 },
+        { "layer": "img", "level": 3 },
+        { "layer": "img", "level": 4 },
+        { "layer": "img", "level": 5 },
+        { "layer": "img", "level": 6 },
+        { "layer": "img", "level": 7 },
+        { "layer": "img", "level": 8 },
+        { "layer": "img", "level": 9 },
+        { "layer": "img", "level": 10, "range": [0, 0, 10, 20] }
+    ]
+}
