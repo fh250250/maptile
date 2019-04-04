@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const ProgressBar = require('progress')
+const ProgressBar = require('./node-progress')
 const { db } = require('./common')
 const config = require('../config')
 
@@ -68,10 +68,9 @@ function * tile_generator () {
 
 
 db.exec(fs.readFileSync(path.resolve(__dirname, 'database.sql'), 'utf8'))
-db.pragma('journal_mode = WAL')
 
 const bar = new ProgressBar(
-    '[:bar] :percent [:current/:total] :rate/qps  :etas  :elapsed', {
+    '[:bar] :percent [:current/:total] :rate q/s :eta :elapsed', {
         head: '>',
         total: tile_total_count(),
         width: 30,

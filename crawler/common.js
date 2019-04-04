@@ -6,6 +6,7 @@ const config = require('../config')
 
 
 const db = sqlite3(path.resolve(__dirname, '..', `${config.name}.db`))
+db.pragma('journal_mode = WAL')
 
 
 
