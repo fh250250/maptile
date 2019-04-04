@@ -1,13 +1,14 @@
 {
-  "name": "maptile_crawler",
+  "name": "maptile",
   "version": "1.0.0",
   "dependencies": {
     "better-sqlite3": "^5.4.0",
-    "blessed": "^0.1.81",
-    "blessed-contrib": "^4.8.12",
-    "download": "^7.1.0",
+    "cheerio": "^1.0.0-rc.2",
     "faker": "^4.1.0",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "progress": "^2.0.3",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
   },
   "scripts": {}
 }

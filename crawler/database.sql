@@ -1,5 +1,5 @@
 -- 瓦块图表
-CREATE TABLE tiles (
+CREATE TABLE IF NOT EXISTS tiles (
     layer CHAR (8) NOT NULL,
     level INTEGER  NOT NULL,
     x     INTEGER  NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE tiles (
     data  BLOB
 );
 
-CREATE UNIQUE INDEX tiles_unique_index ON tiles (
+CREATE UNIQUE INDEX IF NOT EXISTS tiles_unique_index ON tiles (
     layer,
     level,
     x,

@@ -1,38 +1,92 @@
-require('./runtime')
-
 const path = require('path')
 const fs = require('fs')
-const blessed = require('blessed')
-const contrib = require('blessed-contrib')
+const ProgressBar = require('progress')
+const { db } = require('./common')
+const config = require('../config')
 
 
-const screen = blessed.screen()
-const layout = new contrib.grid({ rows: 6, cols: 6, screen })
-
-const progress_widget = layout.set(1, 2, 1, 2, contrib.gauge, { label: 'Progress', stroke: 'green', fill: 'white' })
-const log_widget = layout.set(2, 1, 3, 4, contrib.log, { label: 'Logs', fg: 'green' })
-
-screen.render()
 
 
-log_widget.log('create database -->')
-db.exec(fs.readFileSync(path.resolve(__dirname, 'database.sql'), 'utf8'))
-log_widget.log('create database <--')
 
-db.pragma('journal_mode = WAL')
+// 根据配置计算瓦块总数
+function tile_total_count() {
+    let count = 0
 
-const total = tile_total_count()
-let count = 1
+    for (const task of config.tasks) {
+        let width = 0
+        let height = 0
 
-for (const tile of tile_generator()) {
-    db.prepare(`
-        INSERT INTO tiles (layer, level, x, y)
-        VALUES ($layer, $level, $x, $y)
-    `).run(tile)
+        if (task.range) {
+            width = Math.abs(task.range[0] - task.range[2]) + 1
+            height = Math.abs(task.range[1] - task.range[3]) + 1
+        } else {
+            width = height = Math.pow(2, task.level)
+        }
 
-    log_widget.log(`layer: ${tile.layer}, level: ${tile.level}, x: ${tile.x}, y: ${tile.y}`)
-    progress_widget.setData(count / total)
-    count++
+        count += width * height
+    }
+
+    return count
 }
 
-process.exit(0)
+
+// 根据配置生成瓦块
+function * tile_generator () {
+    for (const task of config.tasks) {
+        let x = 0
+        let y = 0
+        let width = 0
+        let height = 0
+
+        if (task.range) {
+            x = Math.min(task.range[0], task.range[2])
+            y = Math.min(task.range[1], task.range[3])
+            width = Math.abs(task.range[0] - task.range[2]) + 1
+            height = Math.abs(task.range[1] - task.range[3]) + 1
+        } else {
+            x = 0
+            y = 0
+            width = height = Math.pow(2, task.level)
+        }
+
+        for (let w = 0; w < width; w++) {
+            for (let h = 0; h < height; h++) {
+                yield({
+                    layer: task.layer,
+                    level: task.level,
+                    x: x + w,
+                    y: y + h
+                })
+            }
+        }
+    }
+}
+
+
+
+
+
+
+db.exec(fs.readFileSync(path.resolve(__dirname, 'database.sql'), 'utf8'))
+db.pragma('journal_mode = WAL')
+
+const bar = new ProgressBar(
+    '[:bar] :percent [:current/:total] :rate/qps  :etas  :elapsed', {
+        head: '>',
+        total: tile_total_count(),
+        width: 30,
+        renderThrottle: 100
+    })
+
+for (const tile of tile_generator()) {
+    try {
+        db.prepare(`
+            INSERT INTO tiles (layer, level, x, y)
+            VALUES ($layer, $level, $x, $y)
+        `).run(tile)
+    } catch (e) {
+        // 已存在
+    }
+
+    bar.tick()
+}
