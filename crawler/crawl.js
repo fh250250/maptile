@@ -118,7 +118,7 @@ function remain_tile_count () {
     const { count } = db.prepare(`
         SELECT COUNT(1) as count
         FROM tiles
-        WHERE data IS NULL
+        WHERE data = 0
     `).get()
 
     return count
@@ -151,7 +151,7 @@ async function run () {
         const tiles = db.prepare(`
             SELECT layer, level, x, y
             FROM tiles
-            WHERE data IS NULL
+            WHERE data = 0
             ORDER BY RANDOM()
             LIMIT $limit
         `).all({ limit: config.concurrent })

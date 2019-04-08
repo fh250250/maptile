@@ -1,17 +1,21 @@
 {
-    "db_name": "china",
+    "db_name": "airmacau",
     "concurrent": 100,
     "token": "e50f3701cc599285313b59747c47c77f",
     "tasks": [
-        { "layer": "img", "level": 1 },
-        { "layer": "img", "level": 2 },
-        { "layer": "img", "level": 3 },
-        { "layer": "img", "level": 4 },
-        { "layer": "img", "level": 5 },
-        { "layer": "img", "level": 6 },
-        { "layer": "img", "level": 7 },
-        { "layer": "img", "level": 8 },
-        { "layer": "img", "level": 9 },
-        { "layer": "img", "level": 10, "range": [0, 0, 10, 20] }
+        { "layer": "img", "level": 1, "range": [1, 1, 1, 0] },
+        { "layer": "img", "level": 2, "range": [2, 2, 3, 1] },
+        { "layer": "img", "level": 3, "range": [5, 4, 7, 2] },
+        { "layer": "img", "level": 4, "range": [11, 8, 14, 5] },
+        { "layer": "img", "level": 5, "range": [22, 17, 29, 10] },
+        { "layer": "img", "level": 6, "range": [44, 34, 58, 20] },
+        { "layer": "img", "level": 7, "range": [89, 68, 117, 40] },
+        { "layer": "img", "level": 8, "range": [178, 136, 235, 81] },
+        { "layer": "img", "level": 9, "range": [357, 272, 471, 162] },
+        { "layer": "img", "level": 10, "range": [715, 545, 943, 324] },
+        { "layer": "img", "level": 11, "range": [1431, 1090, 1887, 648] },
+        { "layer": "img", "level": 12, "range": [2863, 2181, 3775, 1296] },
+        { "layer": "img", "level": 13, "range": [5726, 4362, 7550, 2592] },
+        { "layer": "img", "level": 14, "range": [11453, 8724, 15100, 5185] }
     ]
 }

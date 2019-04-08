@@ -67,25 +67,39 @@ function * tile_generator () {
 
 
 
-db.exec(fs.readFileSync(path.resolve(__dirname, 'database.sql'), 'utf8'))
+// 创建表
+console.log(`----------> 创建表`)
+db.exec(fs.readFileSync(path.resolve(__dirname, 'sql', 'create_table.sql'), 'utf8'))
+console.log(`<---------- 创建表`)
+
+
+
 
 const bar = new ProgressBar(
-    '[:bar] :percent [:current/:total] :rate q/s :eta :elapsed', {
+    '[:bar] [:current/:total]  :percent  :rateq/s  剩余:eta  已运行:elapsed', {
         head: '>',
         total: tile_total_count(),
         width: 30,
-        renderThrottle: 100
+        renderThrottle: 1000
     })
 
+
+
+console.log(`----------> 插入数据`)
 for (const tile of tile_generator()) {
-    try {
-        db.prepare(`
-            INSERT INTO tiles (layer, level, x, y)
-            VALUES ($layer, $level, $x, $y)
-        `).run(tile)
-    } catch (e) {
-        // 已存在
-    }
+    db.prepare(`
+        INSERT OR IGNORE INTO tiles (layer, level, x, y)
+        VALUES ($layer, $level, $x, $y)
+    `).run(tile)
 
     bar.tick()
 }
+console.log(`<---------- 插入数据`)
+
+
+
+
+// 创建索引
+console.log(`----------> 创建索引`)
+db.exec(fs.readFileSync(path.resolve(__dirname, 'sql', 'create_index.sql'), 'utf8'))
+console.log(`<---------- 创建索引`)

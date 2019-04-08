@@ -4,12 +4,13 @@ CREATE TABLE IF NOT EXISTS tiles (
     level INTEGER  NOT NULL,
     x     INTEGER  NOT NULL,
     y     INTEGER  NOT NULL,
-    data  BLOB
-);
-
-CREATE UNIQUE INDEX IF NOT EXISTS tiles_unique_index ON tiles (
-    layer,
-    level,
-    x,
-    y
-);
+    data  BLOB     NOT NULL
+                   DEFAULT (0),
+    PRIMARY KEY (
+        layer,
+        level,
+        x,
+        y
+    )
+)
+WITHOUT ROWID;

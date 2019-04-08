@@ -10,7 +10,7 @@
 
 
 
- const moment = require('moment')
+const moment = require('moment')
 
 moment.locale('zh-cn')
 
