@@ -1,5 +1,5 @@
 {
-    "name": "china",
+    "db_name": "china",
     "concurrent": 100,
     "token": "e50f3701cc599285313b59747c47c77f",
     "tasks": [
