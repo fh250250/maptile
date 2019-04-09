@@ -69,7 +69,7 @@ class ProxyPool {
 
         this._ui.log(chalk.blue(`<-------------- 抓取代理 ${fetched_list.length}`))
 
-        this._update_pool([...fetched_list, 'http://127.0.0.1:1087'])
+        this._update_pool(fetched_list)
 
         // 启动定时器
         this._timer = setTimeout(this.fetch.bind(this), 60 * 1000)
