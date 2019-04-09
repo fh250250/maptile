@@ -52,9 +52,15 @@ class ProxyPool {
 
     async fetch () {
         const pages = [
+            // 普通
             'https://www.kuaidaili.com/free/intr/',
             'https://www.kuaidaili.com/free/intr/2/',
-            'https://www.kuaidaili.com/free/intr/3/'
+            'https://www.kuaidaili.com/free/intr/3/',
+
+            // 高匿
+            'https://www.kuaidaili.com/free/inha/',
+            'https://www.kuaidaili.com/free/inha/2/',
+            'https://www.kuaidaili.com/free/inha/3/',
         ]
 
 
@@ -63,7 +69,7 @@ class ProxyPool {
         let fetched_list = []
         for (const page of pages) {
             fetched_list.push(await this._fetch_free_proxy(page))
-            await delay(1000)
+            await delay(2000)
         }
         fetched_list = _.flatten(fetched_list)
 
