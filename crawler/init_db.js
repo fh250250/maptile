@@ -1,8 +1,12 @@
 const path = require('path')
 const fs = require('fs')
-const ProgressBar = require('./node-progress')
+const Progress = require('./progress')
 const { db } = require('./common')
 const config = require('../config')
+const moment = require('moment')
+
+
+moment.locale('zh-cn')
 
 
 
@@ -70,18 +74,27 @@ function * tile_generator () {
 // 创建表
 console.log(`----------> 创建表`)
 db.exec(fs.readFileSync(path.resolve(__dirname, 'sql', 'create_table.sql'), 'utf8'))
-console.log(`<---------- 创建表`)
 
 
 
 
-const bar = new ProgressBar(
-    '[:bar] [:current/:total]  :percent  :rateq/s  剩余:eta  已运行:elapsed', {
-        head: '>',
-        total: tile_total_count(),
-        width: 30,
-        renderThrottle: 1000
+const progress = new Progress(tile_total_count())
+const stream = process.stdout
+
+if (stream.isTTY) {
+    progress.on('update', ({ total, current, percent, elapsed, eta, rate }) => {
+        const format_elapsed = moment.duration(elapsed, 's').humanize()
+        const format_eta = moment.duration(eta, 's').humanize()
+        const format_rate = rate.toFixed(2)
+        const format_percent = `${percent.toFixed(2)}%`
+
+        const message = `[${current}/${total}] ${format_percent}  速率:${format_rate}  已运行:${format_elapsed}  剩余:${format_eta}`
+
+        stream.cursorTo(0)
+        stream.write(message)
+        stream.clearLine(1)
     })
+}
 
 
 
@@ -92,9 +105,8 @@ for (const tile of tile_generator()) {
         VALUES ($layer, $level, $x, $y)
     `).run(tile)
 
-    bar.tick()
+    progress.tick()
 }
-console.log(`<---------- 插入数据`)
 
 
 
@@ -102,4 +114,3 @@ console.log(`<---------- 插入数据`)
 // 创建索引
 console.log(`----------> 创建索引`)
 db.exec(fs.readFileSync(path.resolve(__dirname, 'sql', 'create_index.sql'), 'utf8'))
-console.log(`<---------- 创建索引`)
