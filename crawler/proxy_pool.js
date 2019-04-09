@@ -78,7 +78,7 @@ class ProxyPool {
         this._update_pool(fetched_list)
 
         // 启动定时器
-        this._timer = setTimeout(this.fetch.bind(this), 90 * 1000)
+        this._timer = setTimeout(this.fetch.bind(this), 120 * 1000)
     }
 
     destroy () {
