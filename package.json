@@ -13,5 +13,9 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },
-  "scripts": {}
+  "scripts": {
+    "crawl:init": "node ./crawler/init_db",
+    "crawl:run": "node ./crawler/crawl",
+    "crawl:info": "node ./crawler/info"
+  }
 }
