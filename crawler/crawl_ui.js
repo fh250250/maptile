@@ -46,7 +46,12 @@ class UI {
     }
 
     set_proxy_pool (pool) {
-        this._proxy_pool.setItems(pool.map(p => `${p.proxy}{|}${p.rank}`))
+        const items = pool.map(p => `${p.proxy}{|}${p.rank}`)
+
+        this._proxy_pool.setItems([
+            `总数{|}${pool.length}`,
+            ...items
+        ])
     }
 
     set_status ({ total, current, percent, elapsed, eta, rate }) {
