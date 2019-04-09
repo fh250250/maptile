@@ -84,7 +84,7 @@ class ProxyPool {
 
         if (idx >= 0) {
             // 限制最大为 500
-            this._pool[idx].rank = Math.max(this._pool[idx].rank + 1, 500)
+            this._pool[idx].rank = Math.min(this._pool[idx].rank + 1, 500)
             this._validate(idx)
         }
     }
