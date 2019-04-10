@@ -68,7 +68,13 @@ class ProxyPool {
 
         let fetched_list = []
         for (const page of pages) {
-            fetched_list.push(await this._fetch_free_proxy(page))
+            let proxy_list = []
+            try {
+                proxy_list = await this._fetch_free_proxy(page)
+            } catch (e) {
+                this._ui.log(`${chalk.red('[抓取代理失败]')} ${page}`)
+            }
+            fetched_list.push(proxy_list)
             await delay(2000)
         }
         fetched_list = _.flatten(fetched_list)
