@@ -7,15 +7,21 @@
     "blessed-contrib": "^4.8.12",
     "chalk": "^2.4.2",
     "cheerio": "^1.0.0-rc.2",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4",
     "faker": "^4.1.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "morgan": "^1.9.1",
+    "pug": "^2.0.3",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7"
+    "request-promise-native": "^1.0.7",
+    "stylus": "^0.54.5"
   },
   "scripts": {
     "crawl:init": "node ./crawler/init_db",
     "crawl:run": "node ./crawler/crawl",
-    "crawl:info": "node ./crawler/info"
+    "crawl:info": "node ./crawler/info",
+    "serve": "node ./server/app"
   }
 }
