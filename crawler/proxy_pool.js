@@ -2,7 +2,7 @@ const _ = require('lodash')
 const request = require('request-promise-native')
 const cheerio = require('cheerio')
 const chalk = require('chalk')
-const { delay } = require('./common')
+const { delay } = require('../common/utils')
 
 
 class ProxyPool {

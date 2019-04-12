@@ -1,6 +1,7 @@
 const moment = require('moment')
 const config = require('../config')
-const { db, transform_size_from_bytes } = require('./common')
+const { transform_size_from_bytes } = require('../common/utils')
+const db = require('../common/db')
 
 moment.locale('zh-cn')
 

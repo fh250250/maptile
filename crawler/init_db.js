@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const Progress = require('./progress')
-const { db } = require('./common')
+const db = require('../common/db')
 const config = require('../config')
 const moment = require('moment')
 

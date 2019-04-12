@@ -1,7 +1,7 @@
 {
     "db_name": "airmacau",
     "concurrent": 100,
-    "timeout": 10000,
+    "timeout": 20000,
     "token": "e50f3701cc599285313b59747c47c77f",
     "tasks": [
         { "layer": "img", "level": 1, "range": [1, 1, 1, 0] },
