@@ -48,7 +48,7 @@ class App {
         if (!proxy) { return delay(5000) }
 
         return request({
-            uri: `http://t${_.random(0, 7)}.tianditu.gov.cn/${tile.layer}_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${tile.layer}&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX=${tile.level}&TILEROW=${tile.x}&TILECOL=${tile.y}&tk=${config.token}`,
+            uri: `http://t${_.random(0, 7)}.tianditu.gov.cn/${tile.layer}_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=${tile.layer}&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX=${tile.level}&TILEROW=${tile.y}&TILECOL=${tile.x}&tk=${config.token}`,
             headers: { 'User-Agent': faker.internet.userAgent() },
             encoding: null,
             proxy,
