@@ -1,0 +1,11 @@
+extends layout
+
+block css
+    link(rel="stylesheet", href="/css/settings.css")
+
+block js
+    script(src="/js/settings.js")
+
+block content
+    input#bounds(type="hidden", value=JSON.stringify(bounds))
+    #map

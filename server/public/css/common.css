@@ -5,3 +5,13 @@ body {
   font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
   line-height: 1.5;
 }
+.debug_coords_tile {
+  font-size: 24px;
+  font-family: Monaco, monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: 1px solid #ccc;
+  color: #fff;
+  background-color: rgba(0,0,0,0.1);
+}

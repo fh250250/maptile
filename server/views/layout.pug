@@ -7,10 +7,15 @@ html
         title maptile
 
         link(rel="stylesheet", href="/vendor/normalize.css")
+        link(rel="stylesheet", href="/vendor/leaflet/leaflet.css")
+        link(rel="stylesheet", href="/vendor/leaflet_draw/leaflet.draw.css")
         link(rel="stylesheet", href="/css/common.css")
         block css
     body
         block content
 
+        script(src="/vendor/leaflet/leaflet.js")
+        script(src="/vendor/leaflet_draw/leaflet.draw.js")
+        script(src="/vendor/leaflet/L.Map.Sync.js")
         script(src="/js/common.js")
         block js
