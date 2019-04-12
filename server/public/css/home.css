@@ -1,0 +1,22 @@
+html,
+body {
+  height: 100%;
+}
+body {
+  display: flex;
+}
+#map_our,
+#map_std {
+  width: 50%;
+  height: 100%;
+}
+.debug_coords_tile {
+  font-size: 24px;
+  font-family: Monaco, monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: 1px solid #ccc;
+  color: #fff;
+  background-color: rgba(0,0,0,0.1);
+}

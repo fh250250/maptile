@@ -6,6 +6,11 @@ html
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
         title maptile
 
-        link(rel="stylesheet", href="/css/app.css")
+        link(rel="stylesheet", href="/vendor/normalize.css")
+        link(rel="stylesheet", href="/css/common.css")
+        block css
     body
         block content
+
+        script(src="/js/common.js")
+        block js
