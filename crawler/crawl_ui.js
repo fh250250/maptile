@@ -28,7 +28,9 @@ class UI {
             items: [
                 `数据库{|}${config.db_name}`,
                 `并发量{|}${config.concurrent}`,
-                `超时{|}${config.timeout}ms`
+                `请求超时{|}${config.timeout / 1000}s`,
+                `代理类型{|}${config.proxy.api ? '快代理' : '免费'}`,
+                `代理池刷新周期{|}${config.proxy.interval / 1000}s`,
             ]
         })
         this._speed = this._grid.set(2, 2, 1, 1, contrib.line, {

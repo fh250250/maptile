@@ -19,5 +19,9 @@
         { "layer": "img", "level": 12, "range": [2881,2173,3781,1308] },
         { "layer": "img", "level": 13, "range": [5762,4347,7563,2616] },
         { "layer": "img", "level": 14, "range": [11525,8694,15127,5232] }
-    ]
+    ],
+    "proxy": {
+        "api": false,
+        "interval": 120000
+    }
 }

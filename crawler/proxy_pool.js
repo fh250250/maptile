@@ -3,6 +3,7 @@ const request = require('request-promise-native')
 const cheerio = require('cheerio')
 const chalk = require('chalk')
 const { delay } = require('../common/utils')
+const config = require('../config')
 
 
 class ProxyPool {
@@ -12,7 +13,7 @@ class ProxyPool {
         this._ui = ui
     }
 
-    async _fetch_free_proxy (url) {
+    async _fetch_free_page (url) {
         const html = await request(url)
         const $ = cheerio.load(html)
 
@@ -30,7 +31,7 @@ class ProxyPool {
             const proxy = _.find(this._pool, p => p.proxy === new_proxy)
 
             if (!proxy) {
-                this._pool.push({ proxy: new_proxy, rank: 30 })
+                this._pool.push({ proxy: new_proxy, rank: 20 })
             }
         }
 
@@ -45,12 +46,10 @@ class ProxyPool {
         this._ui.set_proxy_pool(this._pool)
     }
 
-    get_random_proxy () {
-        const proxy = this._pool[_.random(0, this._pool.length - 1)]
-        return proxy ? proxy.proxy : null
-    }
-
-    async fetch () {
+    /**
+     * 抓取免费代理
+     */
+    async _fetch_free () {
         const pages = [
             // 普通
             'https://www.kuaidaili.com/free/intr/',
@@ -63,28 +62,69 @@ class ProxyPool {
             'https://www.kuaidaili.com/free/inha/3/',
         ]
 
+        this._ui.log(chalk.blue('抓取免费代理 -------------->'))
 
-        this._ui.log(chalk.blue('抓取代理 -------------->'))
-
-        let fetched_list = []
+        let results = []
         for (const page of pages) {
             let proxy_list = []
             try {
-                proxy_list = await this._fetch_free_proxy(page)
+                proxy_list = await this._fetch_free_page(page)
             } catch (e) {
-                this._ui.log(`${chalk.red('[抓取代理失败]')} ${page}`)
+                this._ui.log(`${chalk.red('[抓取免费代理失败]')} ${page}`)
             }
-            fetched_list.push(proxy_list)
+            results.push(proxy_list)
             await delay(2000)
         }
-        fetched_list = _.flatten(fetched_list)
+        results = _.flatten(results)
 
-        this._ui.log(chalk.blue(`<-------------- 抓取代理 ${fetched_list.length}`))
+        this._ui.log(chalk.blue(`<-------------- 抓取免费代理 ${results.length}`))
+        return results
+    }
 
-        this._update_pool(fetched_list)
+    /**
+     * 获取快代理的收费代理
+     */
+    async _fetch_unfree () {
+        let results = []
+
+        this._ui.log(chalk.blue('获取代理 -------------->'))
+
+        try {
+            const body = await request(config.proxy.api)
+
+            if (/ERROR/.test(body)) { throw new Error(body) }
+
+            results = body.split('\n').map(p => `http://${p}`)
+        } catch (e) {
+            this._ui.log(`${chalk.red('[获取代理失败]')} ${e.message}`)
+        }
+
+        this._ui.log(chalk.blue(`<-------------- 获取代理 ${results.length}`))
+        return results
+    }
+
+
+    /**
+     * 获取代理
+     */
+    async fetch () {
+        if (this._pool.length < 500) {
+
+            // 如果配置了获取代理的 api 接口，那么就使用收费的代理
+            const list = config.proxy.api
+                        ? await this._fetch_unfree()
+                        : await this._fetch_free()
+
+            this._update_pool(list)
+        }
 
         // 启动定时器
-        this._timer = setTimeout(this.fetch.bind(this), 120 * 1000)
+        this._timer = setTimeout(this.fetch.bind(this), config.proxy.interval)
+    }
+
+    get_random_proxy () {
+        const proxy = this._pool[_.random(0, this._pool.length - 1)]
+        return proxy ? proxy.proxy : null
     }
 
     destroy () {
@@ -96,7 +136,7 @@ class ProxyPool {
 
         if (idx >= 0) {
             // 限制最大为 500
-            this._pool[idx].rank = Math.min(this._pool[idx].rank + 1, 500)
+            this._pool[idx].rank = Math.min(this._pool[idx].rank + 1, 200)
             this._validate(idx)
         }
     }

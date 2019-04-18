@@ -3,6 +3,7 @@ const request = require('request-promise-native')
 const faker = require('faker')
 const { SqliteError } = require('better-sqlite3')
 const chalk = require('chalk')
+const image_type = require('image-type')
 const db = require('../common/db')
 const { delay } = require('../common/utils')
 const Progress = require('./progress')
@@ -54,6 +55,11 @@ class App {
             proxy,
             timeout: config.timeout
         }).then(data => {
+            if (!image_type(data)) {
+                // buffer 不是图片，可能是代理服务器返回的文本
+                throw new Error('不是图片')
+            }
+
             db.prepare(`
                 UPDATE tiles
                 SET data = $data
@@ -70,7 +76,7 @@ class App {
             } else {
                 // request 错误
                 this.proxy_pool.fail(proxy)
-                this.ui.log(`${chalk.red('[请求失败]')} ${e.name}`)
+                this.ui.log(`${chalk.red('[失败]')} ${e.message}`)
             }
         })
     }
