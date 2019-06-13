@@ -1,13 +1,18 @@
 const path = require('path')
 const fs = require('fs')
-const Progress = require('../common/progress')
-const db = require('../common/db')
-const config = require('../config')
 const moment = require('moment')
+const sqlite3 = require('better-sqlite3')
+const Progress = require('../common/progress')
+const from_db = require('../common/db')
+const export_config = require('./config')
 
 
 moment.locale('zh-cn')
 
+
+const to_db = sqlite3(path.resolve(__dirname, '..', 'db', `export_${moment().format('YYYYMMDDHHmmss')}.db`))
+
+to_db.pragma('journal_mode = WAL')
 
 
 
@@ -16,7 +21,7 @@ moment.locale('zh-cn')
 function tile_total_count() {
     let count = 0
 
-    for (const task of config.tasks) {
+    for (const task of export_config) {
         let width = 0
         let height = 0
 
@@ -36,7 +41,7 @@ function tile_total_count() {
 
 // 根据配置生成瓦块
 function * tile_generator () {
-    for (const task of config.tasks) {
+    for (const task of export_config) {
         let x = 0
         let y = 0
         let width = 0
@@ -68,16 +73,6 @@ function * tile_generator () {
 
 
 
-
-
-
-// 创建表
-console.log('----------> 创建表')
-db.exec(fs.readFileSync(path.resolve(__dirname, '../common/sql/create_table.sql'), 'utf8'))
-
-
-
-
 const progress = new Progress(tile_total_count())
 const stream = process.stdout
 
@@ -95,20 +90,27 @@ progress.on('update', ({ total, current, percent, elapsed, eta, rate }) => {
 })
 
 
+// 创建表
+console.log('----------> 创建数据表')
+to_db.exec(fs.readFileSync(path.resolve(__dirname, '../common/sql/create_table.sql'), 'utf8'))
 
-console.log(`----------> 插入数据`)
+console.log(`----------> 导入数据`)
 for (const tile of tile_generator()) {
-    db.prepare(`
-        INSERT OR IGNORE INTO tiles (layer, level, x, y)
-        VALUES ($layer, $level, $x, $y)
-    `).run(tile)
+    const source = from_db.prepare(`
+        SELECT * FROM tiles
+        WHERE layer = $layer AND level = $level AND x = $x AND y = $y
+    `).get(tile)
+
+    if (source && source.data) {
+        to_db.prepare(`
+            INSERT INTO tiles (layer, level, x, y, data)
+            VALUES ($layer, $level, $x, $y, $data)
+        `).run(source)
+    }
 
     progress.tick()
 }
 
-
-
-
 // 创建索引
 console.log('\n----------> 创建索引')
-db.exec(fs.readFileSync(path.resolve(__dirname, '../common/sql/create_index.sql'), 'utf8'))
+to_db.exec(fs.readFileSync(path.resolve(__dirname, '../common/sql/create_index_export.sql'), 'utf8'))

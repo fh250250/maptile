@@ -23,6 +23,7 @@
     "crawl:init": "node ./crawler/init_db",
     "crawl:run": "node ./crawler/crawl",
     "crawl:info": "node ./crawler/info",
-    "serve": "node ./server/app"
+    "serve": "node ./server/app",
+    "export": "node ./export/export"
   }
 }

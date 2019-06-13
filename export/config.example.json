@@ -1,0 +1,27 @@
+[
+    { "layer": "img", "level": 1 },
+    { "layer": "img", "level": 2 },
+    { "layer": "img", "level": 3 },
+    { "layer": "img", "level": 4 },
+    { "layer": "img", "level": 5 },
+    { "layer": "img", "level": 6 },
+    { "layer": "img", "level": 7 },
+    { "layer": "img", "level": 8 },
+    { "layer": "img", "level": 9, "range": [360,271,472,163] },
+    { "layer": "img", "level": 10, "range": [720,543,945,327] },
+    { "layer": "img", "level": 11, "range": [1440,1086,1890,654] },
+    { "layer": "img", "level": 12, "range": [2881,2173,3781,1308] },
+
+    { "layer": "cia", "level": 1 },
+    { "layer": "cia", "level": 2 },
+    { "layer": "cia", "level": 3 },
+    { "layer": "cia", "level": 4 },
+    { "layer": "cia", "level": 5 },
+    { "layer": "cia", "level": 6 },
+    { "layer": "cia", "level": 7 },
+    { "layer": "cia", "level": 8 },
+    { "layer": "cia", "level": 9, "range": [360,271,472,163] },
+    { "layer": "cia", "level": 10, "range": [720,543,945,327] },
+    { "layer": "cia", "level": 11, "range": [1440,1086,1890,654] },
+    { "layer": "cia", "level": 12, "range": [2881,2173,3781,1308] }
+]
