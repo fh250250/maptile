@@ -3,3 +3,5 @@
 /config.json
 /export/config.json
 /db/*.db*
+/export_tiles
+*.tar.*

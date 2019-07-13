@@ -10,6 +10,7 @@
     "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
     "faker": "^4.1.0",
+    "fs-extra": "^8.1.0",
     "image-type": "^4.1.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
